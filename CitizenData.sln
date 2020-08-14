@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30320.27
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CitizenData.Web", "CitizenData.Web\CitizenData.Web.csproj", "{2F64D05D-4189-460C-BE2B-E6EC6C1454EA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2F64D05D-4189-460C-BE2B-E6EC6C1454EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F64D05D-4189-460C-BE2B-E6EC6C1454EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F64D05D-4189-460C-BE2B-E6EC6C1454EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2F64D05D-4189-460C-BE2B-E6EC6C1454EA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {05C70195-78F9-41A1-90A5-EFAEDFA66278}
+	EndGlobalSection
+EndGlobal
