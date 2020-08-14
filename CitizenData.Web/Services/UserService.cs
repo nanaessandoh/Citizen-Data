@@ -58,5 +58,14 @@ namespace CitizenData.Web.Services
             return _context.Users.Any(asset => asset.Id == id);
         }
 
+        public string GetImageExtension(string Filename)
+        {
+            if (Filename.Contains(".png", StringComparison.CurrentCultureIgnoreCase)) return ".png";
+            if (Filename.Contains(".jpeg", StringComparison.CurrentCultureIgnoreCase)) return ".jpep";
+            if (Filename.Contains(".jpg", StringComparison.CurrentCultureIgnoreCase)) return ".jpg";
+            if (Filename.Contains(".bmp", StringComparison.CurrentCultureIgnoreCase)) return ".bmp";
+            else return "";
+        }
+
     }
 }

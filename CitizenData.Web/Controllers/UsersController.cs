@@ -63,21 +63,22 @@ namespace CitizenData.Web.Controllers
             bool fileIsImage = _userService.IsImage($"{user.FormFile.FileName}");
             if (ModelState.IsValid && fileIsImage )
             {
-                // Create a random file name for the P
+                // Create a random file name for the Profile Image
                 string randomFileName = Guid.NewGuid().ToString();
                 // Get the extension of the filename
-
+                string imageExtension = _userService.GetImageExtension($"{user.FormFile.FileName}");
                 // Save the User
-                user.ImageUrl = $"/images/{user.FormFile.FileName}";
+                user.ImageUrl = $"/images/{randomFileName}{imageExtension}";
                 _userService.AddUser(user);
 
                 // Copy the Profile Photo into the wwwroot/images folder
-                string filePath = $"{_env.WebRootPath}\\images\\{user.FormFile.FileName}";
+                string filePath = $"{_env.WebRootPath}\\images\\{randomFileName}{imageExtension}";
                 using (FileStream stream = System.IO.File.Create(filePath))
                 {
                     user.FormFile.CopyTo(stream);
                     stream.Flush();
                 }
+                ViewBag.Message = $"Citizen Created Sucessfully";
                 return RedirectToAction(nameof(Index));
             }
 

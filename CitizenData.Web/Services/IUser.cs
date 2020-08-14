@@ -15,5 +15,6 @@ namespace CitizenData.Web.Services
         void DeleteUser(int userId);
         bool UserExists(int id);
         bool IsImage(string Filename);
+        string GetImageExtension(string Filename);
     }
 }
