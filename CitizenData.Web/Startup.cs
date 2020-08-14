@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CitizenData.Web.Models;
+using CitizenData.Web.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -28,6 +29,7 @@ namespace CitizenData.Web
             services.AddControllersWithViews();
             services.AddDbContext<CitizenDataDBContext>(options
                 => options.UseSqlServer(Configuration.GetConnectionString("CitizenDataConnection")));
+            services.AddTransient<IUser, UserService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

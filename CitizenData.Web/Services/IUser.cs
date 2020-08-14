@@ -6,13 +6,14 @@ using System.Threading.Tasks;
 
 namespace CitizenData.Web.Services
 {
-    interface IUser
+    public interface IUser
     {
         IEnumerable<User> GetAll();
-        User GetById(int userId);
-        void Add(User newUser);
-        void Update(int userId, User inputUser);
-        void Delete(int userId);
-
+        User GetById(int? userId);
+        void AddUser(User newUser);
+        void UpdateUser(User editUser);
+        void DeleteUser(int userId);
+        bool UserExists(int id);
+        bool IsImage(string Filename);
     }
 }

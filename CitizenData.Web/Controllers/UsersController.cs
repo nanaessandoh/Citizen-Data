@@ -8,36 +8,38 @@ using Microsoft.EntityFrameworkCore;
 using CitizenData.Web.Models;
 using Microsoft.AspNetCore.Hosting;
 using System.IO;
+using CitizenData.Web.Services;
 
 namespace CitizenData.Web.Controllers
 {
     public class UsersController : Controller
     {
-        private readonly CitizenDataDBContext _context;
+        private readonly IUser _userService;
+        //private readonly CitizenDataDBContext _context;
         private readonly IWebHostEnvironment _env;
 
-        public UsersController(CitizenDataDBContext context, IWebHostEnvironment env)
+        public UsersController(IWebHostEnvironment env, IUser userService)
         {
-            _context = context;
+            _userService = userService;
             _env = env;
         }
 
         // GET: Users
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            return View(await _context.Users.ToListAsync());
+            var model = _userService.GetAll();
+            return View(model);
         }
 
         // GET: Users/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public IActionResult Details(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var user = await _context.Users
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var user = _userService.GetById(id);
             if (user == null)
             {
                 return NotFound();
@@ -53,19 +55,21 @@ namespace CitizenData.Web.Controllers
         }
 
         // POST: Users/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,GivenName,Surname,Age,DOB,Email,Address,Occupation,FormFile")] User user)
+        public IActionResult Create([Bind("Id,GivenName,Surname,Age,DOB,Email,Address,Occupation,FormFile")] User user)
         {
-            if (ModelState.IsValid)
+            // Check if the file is an image
+            bool fileIsImage = _userService.IsImage($"{user.FormFile.FileName}");
+            if (ModelState.IsValid && fileIsImage )
             {
                 // Create a random file name for the P
-                string randomFileName = Guid.NewGuid();
+                string randomFileName = Guid.NewGuid().ToString();
+                // Get the extension of the filename
+
+                // Save the User
                 user.ImageUrl = $"/images/{user.FormFile.FileName}";
-                _context.Add(user);
-                await _context.SaveChangesAsync();
+                _userService.AddUser(user);
 
                 // Copy the Profile Photo into the wwwroot/images folder
                 string filePath = $"{_env.WebRootPath}\\images\\{user.FormFile.FileName}";
@@ -76,18 +80,20 @@ namespace CitizenData.Web.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+
+            ViewBag.Message = $"Select an image file with the correct extension i.e. .jpeg, .jpg, .png, .bmp ";
             return View(user);
         }
 
         // GET: Users/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public IActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var user = await _context.Users.FindAsync(id);
+            var user = _userService.GetById(id);
             if (user == null)
             {
                 return NotFound();
@@ -95,12 +101,11 @@ namespace CitizenData.Web.Controllers
             return View(user);
         }
 
-        // POST: Users/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,GivenName,Surname,Age,DOB,Email,Address,Occupation,ImageUrl")] User user)
+        public IActionResult Edit(int id, [Bind("Id,GivenName,Surname,Age,DOB,Email,Address,Occupation,ImageUrl")] User user)
         {
             if (id != user.Id)
             {
@@ -111,12 +116,11 @@ namespace CitizenData.Web.Controllers
             {
                 try
                 {
-                    _context.Update(user);
-                    await _context.SaveChangesAsync();
+                    _userService.UpdateUser(user);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!UserExists(user.Id))
+                    if (!_userService.UserExists(user.Id))
                     {
                         return NotFound();
                     }
@@ -130,16 +134,16 @@ namespace CitizenData.Web.Controllers
             return View(user);
         }
 
-        // GET: Users/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+  
+        public IActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var user = await _context.Users
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var user = _userService.GetById(id);
+
             if (user == null)
             {
                 return NotFound();
@@ -148,20 +152,14 @@ namespace CitizenData.Web.Controllers
             return View(user);
         }
 
-        // POST: Users/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public IActionResult DeleteConfirmed(int id)
         {
-            var user = await _context.Users.FindAsync(id);
-            _context.Users.Remove(user);
-            await _context.SaveChangesAsync();
+            _userService.DeleteUser(id);
+    
             return RedirectToAction(nameof(Index));
         }
 
-        private bool UserExists(int id)
-        {
-            return _context.Users.Any(e => e.Id == id);
-        }
     }
 }

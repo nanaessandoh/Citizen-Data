@@ -11,13 +11,13 @@ namespace CitizenData.Web.Services
         private readonly CitizenDataDBContext _context;
         public UserService(CitizenDataDBContext context) => _context = context;
 
-        public void Add(User newUser)
+        public void AddUser(User newUser)
         {
             _context.Add(newUser);
             _context.SaveChanges();
         }
 
-        public void Delete(int userId)
+        public void DeleteUser(int userId)
         {
             var User = GetAll().FirstOrDefault(asset => asset.Id == userId);
             if (User != null)
@@ -32,49 +32,31 @@ namespace CitizenData.Web.Services
             return _context.Users;
         }
 
-        public User GetById(int userId)
+        public User GetById(int? userId)
         {
             return GetAll().FirstOrDefault(asset => asset.Id == userId);
         }
 
-        public void Update(int userId, User inputUser)
+        public bool IsImage(string Filename)
         {
-            var User =  GetAll().FirstOrDefault(asset => asset.Id == userId);
+            bool isPNG = Filename.Contains(".png", StringComparison.CurrentCultureIgnoreCase);
+            bool isJPG = Filename.Contains(".jpg", StringComparison.CurrentCultureIgnoreCase);
+            bool isJPEG = Filename.Contains(".jpeg", StringComparison.CurrentCultureIgnoreCase);
+            bool isBMP = Filename.Contains(".bmp", StringComparison.CurrentCultureIgnoreCase);
 
-            // Given Name
-            if (User.GivenName != inputUser.GivenName)
-            {
-                User.GivenName = inputUser.GivenName;
-            }
-
-            // Surname
-            if (User.Surname != inputUser.Surname)
-            {
-                User.Surname = inputUser.Surname;
-            }
-
-            // Age
-            if (User.Age != inputUser.Age)
-            {
-                User.Age = inputUser.Age;
-            }
-
-            if (User.GivenName != inputUser.GivenName)
-            {
-                User.GivenName = inputUser.GivenName;
-            }
-
-            if (User.GivenName != inputUser.GivenName)
-            {
-                User.GivenName = inputUser.GivenName;
-            }
-
-
-            if (User.GivenName != inputUser.GivenName)
-            {
-                User.GivenName = inputUser.GivenName;
-            }
-
+            return isBMP || isJPEG || isJPG || isPNG;
         }
+
+        public void UpdateUser(User editUser)
+        {
+            _context.Update(editUser);
+            _context.SaveChanges();
+        }
+
+        public bool UserExists(int id)
+        {
+            return _context.Users.Any(asset => asset.Id == id);
+        }
+
     }
 }

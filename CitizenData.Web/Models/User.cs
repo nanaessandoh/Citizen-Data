@@ -44,11 +44,14 @@ namespace CitizenData.Web.Models
         [Required]
         [Display(Name = "Occupation")]
         public string Occupation { get; set; }
- 
+
+        public string ImageUrl { get; set; }
+
         [NotMapped]
+        [Required]
         [Display(Name = "Profile Photo")]
         public IFormFile FormFile { get; set; }
-        public string ImageUrl { get; set; }
+       
 
     }
 }
