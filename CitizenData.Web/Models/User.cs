@@ -49,7 +49,6 @@ namespace CitizenData.Web.Models
         public string ImageUrl { get; set; }
 
         [NotMapped]
-        [Required]
         [Display(Name = "Profile Photo")]
         public IFormFile FormFile { get; set; }
        

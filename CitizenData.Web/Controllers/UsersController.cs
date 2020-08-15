@@ -71,12 +71,9 @@ namespace CitizenData.Web.Controllers
                 _userService.AddUser(user);
 
                 // Copy the Profile Photo into the wwwroot/images folder
-                string filePath = $"{_env.WebRootPath}\\images\\{randomFileName}{imageExtension}";
-                using (FileStream stream = System.IO.File.Create(filePath))
-                {
-                    user.FormFile.CopyTo(stream);
-                    stream.Flush();
-                }
+                _userService.UploadProfileImage(randomFileName, imageExtension, user.FormFile);
+
+                // Alert that citizen has been created
                 TempData["Message"] = "Citizen Created Successfully";
                 return RedirectToAction(nameof(Index));
             }
@@ -104,31 +101,55 @@ namespace CitizenData.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, [Bind("Id,GivenName,Surname,Age,DOB,Email,Address,Occupation,ImageUrl")] User user)
+        public IActionResult Edit(int id, [Bind("Id,GivenName,Surname,Age,DOB,Email,Address,Occupation,ImageUrl,FormFile")] User user)
         {
             if (id != user.Id)
             {
                 return NotFound();
             }
 
+
+
             if (ModelState.IsValid)
             {
-                try
+                // Check if a new profile photo was selected
+                if(user.FormFile != null)
+                {
+                    // Check if the file is an image
+                    bool fileIsImage = _userService.IsImage($"{user.FormFile.FileName}");
+
+                    if (fileIsImage) 
+                    {
+                        // Create a random file name for the New Profile Image
+                        string randomFileName = Guid.NewGuid().ToString();
+                        // Get the extension of the filename
+                        string imageExtension = _userService.GetImageExtension($"{user.FormFile.FileName}");
+                        // Update the User
+                        string newImageUrl = $"/images/{randomFileName}{imageExtension}";
+                        _userService.UpdateAndDeleteOldPhoto(user, newImageUrl);
+                        // Copy the Profile Photo into the wwwroot/images folder
+                        _userService.UploadProfileImage(randomFileName, imageExtension, user.FormFile);
+                        // Alert that citizen has been Updated
+                        TempData["Success"] = "Citizen Updated Successfully";
+                        return RedirectToAction("Edit", new { Id = id });
+                    }
+
+                    // Display warning if the file format is not acceptable
+                    TempData["Message"] = "Accepted extensions are .jpeg .jpg .png .bmp ";
+                    return View(user);
+
+
+                }
+
+                if(user.FormFile == null)
                 {
                     _userService.UpdateUser(user);
                 }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!_userService.UserExists(user.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+
+                // Alert that citizen has been Updated
+                TempData["Success"] = "Citizen Updated Successfully";
+                return RedirectToAction("Edit", new { Id = id });
+                //return RedirectToAction(nameof(Index));
             }
             return View(user);
         }

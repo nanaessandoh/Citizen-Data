@@ -4,15 +4,46 @@
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
+<h1>Edit Citizen</h1>
 
-<h4>User</h4>
 <hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
+@if (TempData["Message"] != null)
+{
+    <div class="row">
+        <div class="col-md-12">
+            <div class="alert alert-warning" role="alert" id="bootstrap-alert">
+                @TempData["Message"]
+            </div>
+        </div>
+    </div>
+}
+
+@if (TempData["Success"] != null)
+{
+    <div class="row">
+        <div class="col-md-12">
+            <div class="alert alert-success" role="alert" id="bootstrap-alert">
+                @TempData["Success"]
+            </div>
+        </div>
+    </div>
+}
+
+<form asp-action="Edit" enctype="multipart/form-data">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input type="hidden" asp-for="Id" />
+    <input type="hidden" asp-for="ImageUrl" />
+    <div class="row">
+
+
+        <div class="col-md-4 text-center">
+            <img class="detailImage" src="@Model.ImageUrl" />
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+                <a class="btn btn-secondary" asp-action="Index">Back to list</a>
+            </div>
+        </div>
+        <div class="col-md-4">
             <div class="form-group">
                 <label asp-for="GivenName" class="control-label"></label>
                 <input asp-for="GivenName" class="form-control" />
@@ -25,14 +56,16 @@
             </div>
             <div class="form-group">
                 <label asp-for="Age" class="control-label"></label>
-                <input asp-for="Age" class="form-control" />
+                <input asp-for="Age" type="number" class="form-control" />
                 <span asp-validation-for="Age" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="DOB" class="control-label"></label>
-                <input asp-for="DOB" class="form-control" />
+                <input asp-for="DOB" class="form-control" id="txtSelectedDate" />
                 <span asp-validation-for="DOB" class="text-danger"></span>
             </div>
+        </div>
+        <div class="col-md-4">
             <div class="form-group">
                 <label asp-for="Email" class="control-label"></label>
                 <input asp-for="Email" class="form-control" />
@@ -48,21 +81,18 @@
                 <input asp-for="Occupation" class="form-control" />
                 <span asp-validation-for="Occupation" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="ImageUrl" class="control-label"></label>
-                <input asp-for="ImageUrl" class="form-control" />
-                <span asp-validation-for="ImageUrl" class="text-danger"></span>
+            <label class="control-label">Update Profile Photo</label>
+            <div class="custom-file mb-3">
+                <input type="file" class="custom-file-input" asp-for="FormFile" id="CustomFile">
+                <label class="custom-file-label" for="CustomFile">Choose file...</label>
+                <p class="small text-muted">File formats .jpg .png .jpeg .bmp</p>
+                <span asp-validation-for="FormFile" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
     </div>
-</div>
+</form>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

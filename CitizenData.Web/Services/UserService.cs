@@ -1,5 +1,6 @@
 ﻿using CitizenData.Web.Models;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -44,12 +45,12 @@ namespace CitizenData.Web.Services
             return GetAll().FirstOrDefault(asset => asset.Id == userId);
         }
 
-        public bool IsImage(string Filename)
+        public bool IsImage(string filename)
         {
-            bool isPNG = Filename.Contains(".png", StringComparison.CurrentCultureIgnoreCase);
-            bool isJPG = Filename.Contains(".jpg", StringComparison.CurrentCultureIgnoreCase);
-            bool isJPEG = Filename.Contains(".jpeg", StringComparison.CurrentCultureIgnoreCase);
-            bool isBMP = Filename.Contains(".bmp", StringComparison.CurrentCultureIgnoreCase);
+            bool isPNG = filename.Contains(".png", StringComparison.CurrentCultureIgnoreCase);
+            bool isJPG = filename.Contains(".jpg", StringComparison.CurrentCultureIgnoreCase);
+            bool isJPEG = filename.Contains(".jpeg", StringComparison.CurrentCultureIgnoreCase);
+            bool isBMP = filename.Contains(".bmp", StringComparison.CurrentCultureIgnoreCase);
 
             return isBMP || isJPEG || isJPG || isPNG;
         }
@@ -65,12 +66,12 @@ namespace CitizenData.Web.Services
             return _context.Users.Any(asset => asset.Id == id);
         }
 
-        public string GetImageExtension(string Filename)
+        public string GetImageExtension(string filename)
         {
-            if (Filename.Contains(".png", StringComparison.CurrentCultureIgnoreCase)) return ".png";
-            if (Filename.Contains(".jpeg", StringComparison.CurrentCultureIgnoreCase)) return ".jpep";
-            if (Filename.Contains(".jpg", StringComparison.CurrentCultureIgnoreCase)) return ".jpg";
-            if (Filename.Contains(".bmp", StringComparison.CurrentCultureIgnoreCase)) return ".bmp";
+            if (filename.Contains(".png", StringComparison.CurrentCultureIgnoreCase)) return ".png";
+            if (filename.Contains(".jpeg", StringComparison.CurrentCultureIgnoreCase)) return ".jpep";
+            if (filename.Contains(".jpg", StringComparison.CurrentCultureIgnoreCase)) return ".jpg";
+            if (filename.Contains(".bmp", StringComparison.CurrentCultureIgnoreCase)) return ".bmp";
             else return "";
         }
 
@@ -92,5 +93,38 @@ namespace CitizenData.Web.Services
 
         }
 
+        public void UploadProfileImage(string filename, string fileExtension, IFormFile imageFile)
+        {
+            // Create path for new file
+            string filePath = $"{_env.WebRootPath}\\images\\{filename}{fileExtension}";
+            using (FileStream stream = System.IO.File.Create(filePath))
+            {
+                imageFile.CopyTo(stream);
+                stream.Flush();
+            }
+        }
+
+        public void UpdateAndDeleteOldPhoto(User editUser, string newImageUrl)
+        {
+            // Select current ImageUrl
+            string filename = editUser.ImageUrl;
+
+            try
+            {
+                // Construct the relative path of the file
+                string filePath = $"{_env.WebRootPath}{filename}";
+                // Delete file from wwwroot folder
+                File.Delete(filePath);
+            }
+            catch (DirectoryNotFoundException dirNotFound)
+            {
+                Console.WriteLine(dirNotFound.Message);
+            }
+
+            //Update to new ImageUrl
+            editUser.ImageUrl = newImageUrl;
+            _context.Update(editUser);
+            _context.SaveChanges();
+        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using CitizenData.Web.Models;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,8 +16,10 @@ namespace CitizenData.Web.Services
         void UpdateUser(User editUser);
         void DeleteUser(int userId);
         bool UserExists(int id);
-        bool IsImage(string Filename);
-        string GetImageExtension(string Filename);
+        bool IsImage(string filename);
+        string GetImageExtension(string filename);
         void DeleteProfilePhoto(int userId);
+        void UploadProfileImage(string filename, string fileExtension, IFormFile imageFile);
+        void UpdateAndDeleteOldPhoto(User editUser, string newImageUrl);
     }
 }
