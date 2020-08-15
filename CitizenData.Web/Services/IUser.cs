@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Permissions;
 using System.Threading.Tasks;
 
 namespace CitizenData.Web.Services
@@ -16,5 +17,6 @@ namespace CitizenData.Web.Services
         bool UserExists(int id);
         bool IsImage(string Filename);
         string GetImageExtension(string Filename);
+        void DeleteProfilePhoto(int userId);
     }
 }

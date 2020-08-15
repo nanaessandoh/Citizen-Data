@@ -1,6 +1,8 @@
 ﻿using CitizenData.Web.Models;
+using Microsoft.AspNetCore.Hosting;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -9,7 +11,12 @@ namespace CitizenData.Web.Services
     public class UserService : IUser
     {
         private readonly CitizenDataDBContext _context;
-        public UserService(CitizenDataDBContext context) => _context = context;
+        private readonly IWebHostEnvironment _env;
+        public UserService(CitizenDataDBContext context, IWebHostEnvironment env)
+        {
+            _context = context;
+            _env = env;
+        }
 
         public void AddUser(User newUser)
         {
@@ -65,6 +72,24 @@ namespace CitizenData.Web.Services
             if (Filename.Contains(".jpg", StringComparison.CurrentCultureIgnoreCase)) return ".jpg";
             if (Filename.Contains(".bmp", StringComparison.CurrentCultureIgnoreCase)) return ".bmp";
             else return "";
+        }
+
+        public void DeleteProfilePhoto(int userId)
+        {
+            // Select Filename of the user
+            string filename = _context.Users.FirstOrDefault(asset => asset.Id == userId).ImageUrl;
+
+            try
+            {
+                // Construct the relative path of the file
+                string filePath = $"{_env.WebRootPath}{filename}";
+                File.Delete(filePath);
+            }
+            catch (DirectoryNotFoundException dirNotFound)
+            {
+                Console.WriteLine(dirNotFound.Message);
+            }
+
         }
 
     }

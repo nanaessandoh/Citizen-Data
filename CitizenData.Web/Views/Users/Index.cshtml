@@ -9,7 +9,7 @@
         <h3>Citizen Records</h3>
     </div>
     <div class="col-md-6 text-right">
-        <a class="btn btn-primary" asp-action="Create">Create Citizen</a>
+        <a class="btn btn-primary" asp-action="Create">Register Citizen</a>
     </div>
 </div>
 
@@ -26,9 +26,10 @@
 }
 
 
+<div id="assetsTable">
 <table class="table">
     <thead>
-        <tr>
+        <tr class="text-center">
             <th>
                 @Html.DisplayNameFor(model => model.ImageUrl)
             </th>
@@ -85,3 +86,4 @@
         }
     </tbody>
 </table>
+</div>

@@ -15,7 +15,6 @@ namespace CitizenData.Web.Controllers
     public class UsersController : Controller
     {
         private readonly IUser _userService;
-        //private readonly CitizenDataDBContext _context;
         private readonly IWebHostEnvironment _env;
 
         public UsersController(IWebHostEnvironment env, IUser userService)
@@ -103,7 +102,6 @@ namespace CitizenData.Web.Controllers
         }
 
 
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Edit(int id, [Bind("Id,GivenName,Surname,Age,DOB,Email,Address,Occupation,ImageUrl")] User user)
@@ -157,6 +155,7 @@ namespace CitizenData.Web.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)
         {
+            _userService.DeleteProfilePhoto(id);
             _userService.DeleteUser(id);
     
             return RedirectToAction(nameof(Index));
