@@ -78,11 +78,11 @@ namespace CitizenData.Web.Controllers
                     user.FormFile.CopyTo(stream);
                     stream.Flush();
                 }
-                ViewBag.Message = $"Citizen Created Sucessfully";
+                TempData["Message"] = "Citizen Created Successfully";
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewBag.Message = $"Select an image file with the correct extension i.e. .jpeg, .jpg, .png, .bmp ";
+            TempData["Message"] = "Accepted extensions are .jpeg .jpg .png .bmp ";
             return View(user);
         }
 

@@ -45,6 +45,7 @@ namespace CitizenData.Web.Models
         [Display(Name = "Occupation")]
         public string Occupation { get; set; }
 
+        [Display(Name = "Photo")]
         public string ImageUrl { get; set; }
 
         [NotMapped]

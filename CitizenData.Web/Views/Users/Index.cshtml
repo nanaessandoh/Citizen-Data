@@ -14,12 +14,12 @@
 </div>
 
 
-@if (!string.IsNullOrEmpty(ViewBag.Message))
+@if (TempData["Message"] != null)
 {
     <div class="row">
         <div class="col-md-12">
             <div class="alert alert-success" role="alert" id="bootstrap-alert">
-                @ViewData["message"]
+                @TempData["Message"]
             </div>
         </div>
     </div>
@@ -29,6 +29,9 @@
 <table class="table">
     <thead>
         <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ImageUrl)
+            </th>
             <th>
                 @Html.DisplayNameFor(model => model.GivenName)
             </th>
@@ -44,40 +47,41 @@
             <th>
                 @Html.DisplayNameFor(model => model.Address)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Occupation)
-            </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
         @foreach (var item in Model)
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.GivenName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Surname)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.DOB)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Email)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Address)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Occupation)
-                </td>
-                <td>
-                    <a class="btn btn-sm btn-primary" asp-action="Edit" asp-route-id="@item.Id"><i class="fa fa-edit"></i></a>
-                    <a class="btn btn-sm btn-info" asp-action="Details" asp-route-id="@item.Id"><i class="fa fa-info-circle" aria-hidden="true"></i></a>
-                    <a class="btn btn-sm btn-danger" asp-action="Delete" asp-route-id="@item.Id"><i class="fa fa-user-times"></i></a>
-                </td>
-            </tr>
+        <tr>
+            <td>
+                <div>
+                    <a asp-controller="Users" asp-action="Details" asp-route-id="@item.Id">
+                        <img src="@item.ImageUrl" class="imageCell" />
+                    </a>
+                </div>
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.GivenName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Surname)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DOB)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Address)
+            </td>
+            <td>
+                <a class="btn btn-sm btn-primary" asp-action="Edit" asp-route-id="@item.Id"><i class="fa fa-edit"></i></a>
+                <a class="btn btn-sm btn-info" asp-action="Details" asp-route-id="@item.Id"><i class="fa fa-info-circle" aria-hidden="true"></i></a>
+                <a class="btn btn-sm btn-danger" asp-action="Delete" asp-route-id="@item.Id"><i class="fa fa-user-times"></i></a>
+            </td>
+        </tr>
         }
     </tbody>
 </table>

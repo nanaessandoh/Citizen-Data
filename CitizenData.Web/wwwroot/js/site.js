@@ -12,4 +12,14 @@ $("#bootstrap-alert").fadeTo(5000, 1000).slideUp(1000, function () {
 });
 
 
+// DatePicker
+$(function () {
+    $('#txtSelectedDate').datepicker({
+        changeMonth: true,
+        changeYear: true,
+        format: "dd/mm/yyyy",
+        language: "tr"
+    });
+});
+
 
