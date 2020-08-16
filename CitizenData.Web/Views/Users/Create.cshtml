@@ -55,14 +55,6 @@
 
             <div class="col-md">
 
-                <label class="control-label">Select Profile Photo</label>
-                <div class="custom-file mb-3">
-                    <input type="file" class="custom-file-input" asp-for="FormFile" id="CustomFile">
-                    <label class="custom-file-label" for="CustomFile">Choose file...</label>
-                    <p class="small text-muted">File formats .jpg .png .jpeg .bmp</p>
-                    <span asp-validation-for="FormFile" class="text-danger"></span>
-                </div>
-
                 <div class="form-group">
                     <label asp-for="Address" class="control-label"></label>
                     <input asp-for="Address" class="form-control" />
@@ -78,6 +70,14 @@
                     <input asp-for="Email" class="form-control" />
                     <span asp-validation-for="Email" class="text-danger"></span>
                 </div>
+                <label class="control-label">Select Profile Photo</label>
+                <div class="custom-file mb-3">
+                    <input type="file" class="custom-file-input" asp-for="FormFile" id="CustomFile">
+                    <label class="custom-file-label" for="CustomFile">Choose file...</label>
+                    <p class="small text-muted">File formats .jpg .png .jpeg .bmp</p>
+                    <span asp-validation-for="FormFile" class="text-danger"></span>
+                </div>
+
             </div>
         </div>
         <div class="row">
