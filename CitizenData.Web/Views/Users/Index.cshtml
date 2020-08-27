@@ -1,22 +1,21 @@
-﻿@*@model IEnumerable<CitizenData.Web.Models.User>*@
-@model CitizenData.Web.Models.UserIndexModel
+﻿@model IEnumerable<CitizenData.Web.Models.User>
 
 @{
     ViewData["Title"] = "Index";
 }
 
-
 <div class="row mb-3">
     <div class="col-md-12">
         <h3>Citizen Records</h3>
     </div>
+
 </div>
 
 <div class="row mb-3">
     <div class="col-md-6">
-        <form class="form-inline">
+        <form class="form-inline" asp-controller="Users" asp-action="Index">
             <div class="form-group mx-md-3">
-                <input asp-for="searchString" class="form-control" placeholder="Email">
+                <input name="searchString" class="form-control" placeholder="Email">
             </div>
             <button type="submit" class="btn btn-primary">Filter</button>
         </form>
@@ -44,16 +43,24 @@
 <table class="table">
     <thead>
         <tr class="text-center">
-            <th>Photo</th>
-            <th>Full Name</th>
-            <th>Age</th>
-            <th>Email</th>
-            <th>Address</th>
+            <th>
+                @Html.DisplayNameFor(model => model.ImageUrl)
+            </th>
+            <th>Full Name </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Age)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Address)
+            </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model.Assets)
+        @foreach (var item in Model)
         {
         <tr>
             <td>
@@ -64,16 +71,17 @@
                 </div>
             </td>
             <td>
-                @item.GivenName @item.Surname
+                @Html.DisplayFor(modelItem => item.GivenName) 
+                @Html.DisplayFor(modelItem => item.Surname)
             </td>
             <td>
-                @item.Age
+                @Html.DisplayFor(modelItem => item.Age)
             </td>
             <td>
-                @item.Email
+                @Html.DisplayFor(modelItem => item.Email)
             </td>
             <td>
-                @item.Address
+                @Html.DisplayFor(modelItem => item.Address)
             </td>
             <td>
                 <a class="btn btn-sm btn-primary" asp-action="Edit" asp-route-id="@item.Id">Edit <i class="fa fa-edit"></i></a>

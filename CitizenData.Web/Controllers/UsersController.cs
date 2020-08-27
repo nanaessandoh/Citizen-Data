@@ -24,27 +24,14 @@ namespace CitizenData.Web.Controllers
         }
 
         // GET: Users
-        public IActionResult Index()
+        public IActionResult Index(string searchString)
         {
-            var allUserModel = _userService.GetAll();
-
-            var listingResult = allUserModel.Select(asset => new UserIndexListingModel
+            var model = _userService.GetAll();
+            
+            if (!string.IsNullOrEmpty(searchString))
             {
-                Id = asset.Id,
-                GivenName = asset.GivenName,
-                Surname = asset.Surname,
-                Address = asset.Address,
-                Age = asset.Age,
-                Email = asset.Email,
-                ImageUrl = asset.ImageUrl
-            });
-
-            var model = new UserIndexModel
-            {
-                searchString = "",
-                Assets = listingResult
-            };
-
+                model =  model.Where(asset => asset.Email.Contains(searchString));
+            }
             return View(model);
         }
 

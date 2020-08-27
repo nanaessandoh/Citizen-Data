@@ -127,14 +127,5 @@ namespace CitizenData.Web.Services
             _context.SaveChanges();
         }
 
-        public IQueryable<User> GetUser(string searchString)
-        {
-            if (!string.IsNullOrEmpty(searchString))
-            {
-                return _context.Users.Where(asset => asset.Email.Contains(searchString));
-            }
-
-            return null;
-        }
     }
 }

@@ -11,7 +11,6 @@ namespace CitizenData.Web.Services
     public interface IUser
     {
         IEnumerable<User> GetAll();
-        IQueryable<User> GetUser(string searchString);
         User GetById(int? userId);
         void AddUser(User newUser);
         void UpdateUser(User editUser);
