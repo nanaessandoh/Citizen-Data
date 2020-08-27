@@ -26,7 +26,25 @@ namespace CitizenData.Web.Controllers
         // GET: Users
         public IActionResult Index()
         {
-            var model = _userService.GetAll();
+            var allUserModel = _userService.GetAll();
+
+            var listingResult = allUserModel.Select(asset => new UserIndexListingModel
+            {
+                Id = asset.Id,
+                GivenName = asset.GivenName,
+                Surname = asset.Surname,
+                Address = asset.Address,
+                Age = asset.Age,
+                Email = asset.Email,
+                ImageUrl = asset.ImageUrl
+            });
+
+            var model = new UserIndexModel
+            {
+                searchString = "",
+                Assets = listingResult
+            };
+
             return View(model);
         }
 
