@@ -30,7 +30,14 @@ namespace CitizenData.Web.Controllers
             
             if (!string.IsNullOrEmpty(searchString))
             {
-                model =  model.Where(asset => asset.Email.Contains(searchString));
+                model =  model.Where(asset => 
+                                    asset.Address.Contains(searchString) ||
+                                    asset.Age.Contains(searchString) ||
+                                    asset.DOB.Contains(searchString) ||
+                                    asset.Email.Contains(searchString) ||
+                                    asset.GivenName.Contains(searchString) ||
+                                    asset.Occupation.Contains(searchString) ||
+                                    asset.Surname.Contains(searchString));
             }
             return View(model);
         }
