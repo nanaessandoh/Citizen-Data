@@ -13,6 +13,7 @@ namespace CitizenData.Web.Services
     {
         private readonly CitizenDataDBContext _context;
         private readonly IWebHostEnvironment _env;
+        private static readonly string[] _extensions = { ".jpg", ".jpeg", ".bmp", ".png" };
         public UserService(CitizenDataDBContext context, IWebHostEnvironment env)
         {
             _context = context;
@@ -47,12 +48,15 @@ namespace CitizenData.Web.Services
 
         public bool IsImage(string filename)
         {
-            bool isPNG = filename.Contains(".png", StringComparison.CurrentCultureIgnoreCase);
-            bool isJPG = filename.Contains(".jpg", StringComparison.CurrentCultureIgnoreCase);
-            bool isJPEG = filename.Contains(".jpeg", StringComparison.CurrentCultureIgnoreCase);
-            bool isBMP = filename.Contains(".bmp", StringComparison.CurrentCultureIgnoreCase);
+            // bool isPNG = filename.Contains(".png", StringComparison.CurrentCultureIgnoreCase);
+            // bool isJPG = filename.Contains(".jpg", StringComparison.CurrentCultureIgnoreCase);
+            // bool isJPEG = filename.Contains(".jpeg", StringComparison.CurrentCultureIgnoreCase);
+            // bool isBMP = filename.Contains(".bmp", StringComparison.CurrentCultureIgnoreCase);
 
-            return isBMP || isJPEG || isJPG || isPNG;
+            // return isBMP || isJPEG || isJPG || isPNG;
+            string ext = Path.GetExtension(filename);
+
+            return _extensions.Contains(ext, StringComparer.OrdinalIgnoreCase);
         }
 
         public void UpdateUser(User editUser)

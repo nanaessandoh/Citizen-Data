@@ -72,7 +72,7 @@
                 </div>
                 <label class="control-label">Select Profile Photo</label>
                 <div class="custom-file mb-3">
-                    <input type="file" class="custom-file-input" asp-for="FormFile" id="CustomFile">
+                    <input type="file" class="custom-file-input" asp-for="FormFile" id="CustomFile" accept="image/png, image/jpg, image/jpeg, image.bmp">
                     <label class="custom-file-label" for="CustomFile">Choose file...</label>
                     <p class="small text-muted">File formats .jpg .png .jpeg .bmp</p>
                     <span asp-validation-for="FormFile" class="text-danger"></span>

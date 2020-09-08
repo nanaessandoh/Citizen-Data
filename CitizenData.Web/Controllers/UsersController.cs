@@ -70,28 +70,37 @@ namespace CitizenData.Web.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create([Bind("Id,GivenName,Surname,Age,DOB,Email,Address,Occupation,FormFile")] User user)
         {
-            // Check if the file is an image
-            bool fileIsImage = _userService.IsImage($"{user.FormFile.FileName}");
-            if (ModelState.IsValid && fileIsImage )
+            if(user.FormFile != null)
             {
-                // Create a random file name for the Profile Image
-                string randomFileName = Guid.NewGuid().ToString();
-                // Get the extension of the filename
-                string imageExtension = _userService.GetImageExtension($"{user.FormFile.FileName}");
-                // Save the User
-                user.ImageUrl = $"/images/{randomFileName}{imageExtension}";
-                _userService.AddUser(user);
+                // Check if the file is an image
+                bool fileIsImage = _userService.IsImage($"{user.FormFile.FileName}");
+                if (ModelState.IsValid && fileIsImage)
+                {
+                    // Create a random file name for the Profile Image
+                    string randomFileName = Guid.NewGuid().ToString();
+                    // Get the extension of the filename
+                    string imageExtension = _userService.GetImageExtension($"{user.FormFile.FileName}");
+                    // Save the User
+                    user.ImageUrl = $"/images/{randomFileName}{imageExtension}";
+                    _userService.AddUser(user);
 
-                // Copy the Profile Photo into the wwwroot/images folder
-                _userService.UploadProfileImage(randomFileName, imageExtension, user.FormFile);
+                    // Copy the Profile Photo into the wwwroot/images folder
+                    _userService.UploadProfileImage(randomFileName, imageExtension, user.FormFile);
 
-                // Alert that citizen has been created
-                TempData["Message"] = "Citizen Created Successfully";
-                return RedirectToAction(nameof(Index));
+                    // Alert that citizen has been created
+                    TempData["Message"] = "Citizen Created Successfully";
+                    return RedirectToAction(nameof(Index));
+                }
+
+                TempData["Message"] = "Accepted extensions are .jpeg .jpg .png .bmp ";
+                return View(user);
+            }
+            else
+            {
+                TempData["Message"] = "Select a Display Photo ";
+                return View(user);
             }
 
-            TempData["Message"] = "Accepted extensions are .jpeg .jpg .png .bmp ";
-            return View(user);
         }
 
         // GET: Users/Edit/5
