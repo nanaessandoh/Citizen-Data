@@ -2,8 +2,6 @@
 
  ASP.Net Core App that collects biodata for citizens 
 
-Live Demo Available [Here](http://citizendata.azurewebsites.net/)
-
 # Images
 ![Homepage](Screenshots/1.png "Homepage")
 
