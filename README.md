@@ -1,6 +1,6 @@
 # Citizen-Data
 
- ASP.Net Core App that collects biodata for citizens 
+ ASP.Net Core App that is used to collect biodata of citizens 
 
 # Images
 ![Homepage](Screenshots/1.png "Homepage")
